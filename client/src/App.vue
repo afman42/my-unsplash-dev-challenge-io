@@ -1,10 +1,12 @@
 <script setup lang="ts">
-import { Navbar, ModalDialog,Button  } from "./components";
+import { Navbar, ModalDialog,Button, LoadingSkeleton  } from "./components";
 import { ref } from 'vue';
+import { useFetch } from '@vueuse/core'
 
 const showModal = ref(false);
 const deleteModal = ref(false)
-
+const { isFetching, data, isFinished } =  useFetch<Array<{ label: string, photoUrl: string }>>("http://localhost:3000/all").get().json()
+console.log(data)
 function showMyModal (bool: boolean) {
   showModal.value = bool
 }
@@ -12,28 +14,32 @@ function showMyModal (bool: boolean) {
 function deleteMyModal (bool: boolean) {
   deleteModal.value = bool
 }
+
+
+
 </script>
 
 <template>
   <div class="min-h-screen mx-8 my-2">
     <Navbar :show-modal="showMyModal" />
     <div class="mt-2 container gap-8 columns-3">
-        <div class="w-full flex mb-6">
-          <img id="image" class="w-full aspect-video rounded-lg" src="https://picsum.photos/500/300?random=1" />
+      <template v-if="isFinished && !isFetching">
+        <div class="w-full flex mb-6" v-for="(item,index) in data" :key="item.label">
+          <img id="image" class="w-full rounded-lg" :class="[ index / 2 == 0? 'aspect-video' : 'aspect-square' ]" :src="item.photoUrl" />
           <div class="absolute flex flex-col" id="hover" style="padding:10px 10px;">
-            <h4 style="color:black;margin-bottom: 10px;" class="font-medium font-noto-sans">AAAAAAAAAAAAAAAAAAAAAAAAA</h4>
+            <h4 style="color:black;margin-bottom: 10px;" class="font-medium font-noto-sans">{{ item.label }}</h4>
             <Button @click="deleteMyModal(true)" class="border-black rounded-lg border-red" style="background-color: inherit;width:100px;" text-button="Delete it" />
           </div>
         </div>
-        <!-- <div class="w-full flex mb-6">
-          <img id="image" class="w-full aspect-square rounded-lg" src="https://picsum.photos/500/300?random=2" />
-          <div class="absolute flex-col" id="hover" style="padding:10px 10px;">
-            <h4 style="color:black;margin-bottom: 10px;" class="font-medium font-noto-sans">BBBB</h4>
-            <Button @click="deleteMyModal(true)" class="border-black rounded-lg border-red" style="background-color: inherit;width:100px;" text-button="Delete it" />
-          </div>
-        </div> -->
-        <!-- <LoadingSkeleton width="100%" class="aspect-video mb-6" src="https://picsum.photos/500/300?random=1" />
-        <LoadingSkeleton width="100%" class="aspect-square mb-6" src="https://picsum.photos/500/300?random=2" /> -->
+      </template>
+      <template v-else>
+        <LoadingSkeleton width="100%" class="aspect-video mb-6" />
+        <LoadingSkeleton width="100%" class="aspect-square mb-6" />
+        <LoadingSkeleton width="100%" class="aspect-video mb-6" />
+        <LoadingSkeleton width="100%" class="aspect-square mb-6" />
+        <LoadingSkeleton width="100%" class="aspect-video mb-6" />
+        <LoadingSkeleton width="100%" class="aspect-square mb-6" />
+      </template>
     </div>
     <ModalDialog :show="showModal" @close="showModal = false"> 
       <template v-slot:header>

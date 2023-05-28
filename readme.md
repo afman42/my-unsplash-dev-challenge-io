@@ -14,16 +14,16 @@ Challenge: Create my Unsplash app. Use Front-end libraries like React or Vue. Cr
 Icon: https://google.github.io/material-design-icons/
 
 - client
- - [x] design to code html
- - implementation
-   - [] see list of photos
-   - [] add new photo - should top of the list
-   - [] search by label
-   - [x] hover photo, see label and delete button
-   - [] delete image
+    - [x] design to code html
+    - implementation
+        - [] see list of photos
+        - [] add new photo - should top of the list
+        - [] search by label
+        - [x] hover photo, see label and delete button
+        - [] delete image
 
 - server
- - [x] Read All
- - [x] Create
- - [x] Delete
- - [] Search Photo by label
+    - [x] Read All
+    - [x] Create
+    - [x] Delete
+    - [x] Search Photo by label

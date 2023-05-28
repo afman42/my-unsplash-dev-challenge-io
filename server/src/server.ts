@@ -42,6 +42,63 @@ function buildServer() {
   })
 
   server.route({
+    method: "GET",
+    url: "/search",
+    schema: {
+      response: {
+        "200": {
+          type: "array",
+          properties: {
+            id: { type: "number" },
+            label: { type: "string" },
+            photoUrl: { type: "string" }
+          }
+        },
+        "404": {
+          type: "array",
+          properties: {
+            id: { type: "number" },
+            label: { type: "string" },
+            photoUrl: { type: "string" }
+          }
+        },
+        "500": {
+          type: "object",
+          properties: {
+            data: { type: "string" }
+          }
+        },
+      }
+    },
+    handler: async function(request: FastifyRequest<{
+      Querystring: {
+        nameLabel: string
+      }
+    }>, reply: FastifyReply){   
+      try {
+          const {nameLabel } = request.query
+
+          if(!nameLabel) reply.code(404).send({ message: "Not Found", data: [] })
+          
+          const res = await prisma.photos.findMany({
+            where: { 
+              label: {
+                contains: nameLabel
+              }
+            }
+          })
+
+          if(!res) reply.code(404).send({ message: "Not Found", data: res })
+
+          return reply.code(200).send(res)
+        } catch (error) {
+          reply.code(500).send({ data: "Something Went Wrong"})
+          console.log(error)
+        }
+    }
+  })
+
+  server.route({
     method: "POST",
     url: "/create",
     schema: {
@@ -79,8 +136,14 @@ function buildServer() {
       try {
           const { label, photoUrl } = request.body
           const photoSchema = z.object({
-            label: z.string({ required_error: "The Label is required"}).min(1,{ message: "Must be at least 1 character"}),
-            photoUrl: z.string({ required_error: "The Photo URL is required "}).min(1,{ message: "Must be at least 1 character"})
+            label: z
+              .string({ required_error: "The Label is required"})
+              .min(1,{ message: "Must be at least 1 character"}),
+            photoUrl: z
+              .string({ required_error: "The Photo URL is required "})
+              .min(1,{ message: "Must be at least 1 character"})
+              .refine((text) => text.includes("https://"),"The Photo Url must https")
+              .refine((text) => text.includes(".jpeg") || text.includes(".webp") || text.includes(".jpg") || text.includes(".png"),"The Photo Url must .jpg, .jpeg, .png and .webp")
           })
           const resError = photoSchema.safeParse({ label, photoUrl })
           if(!resError.success ) {

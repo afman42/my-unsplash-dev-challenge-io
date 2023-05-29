@@ -2,11 +2,11 @@
     <teleport to="body"> 
       <transition 
         enter-active-class="transition ease-out duration-200 transform" 
-        enter-from-class="opacity-0" 
-        enter-to-class="opacity-100" 
+        enter-from-class="backdrop-opacity-0" 
+        enter-to-class="backdrop-opacity-100" 
         leave-active-class="transition ease-in duration-200 transform" 
-        leave-from-class="opacity-100" 
-        leave-to-class="opacity-0" 
+        leave-from-class="backdrop-opacity-100" 
+        leave-to-class="backdrop-opacity-0" 
       > 
         <div 
           ref="modal-backdrop" 
@@ -14,19 +14,19 @@
           v-show="show" 
         > 
           <div 
-            class="flex items-center justify-center min-h-screen pt-24" 
+            class="flex items-center justify-center min-h-screen"
           > 
             <transition 
               enter-active-class="transition ease-out duration-300 transform " 
-              enter-from-class="opacity-0 translate-y-10 scale-95" 
-              enter-to-class="opacity-100 translate-y-0 scale-100" 
+              enter-from-class="backdrop-opacity-0 translate-y-10 scale-95" 
+              enter-to-class="backdrop-opacity-100 translate-y-0 scale-100" 
               leave-active-class="ease-in duration-200" 
-              leave-from-class="opacity-100 translate-y-0 scale-100" 
-              leave-to-class="opacity-0 translate-y-10 translate-y-0 scale-95" 
+              leave-from-class="backdrop-opacity-100 translate-y-0 scale-100" 
+              leave-to-class="backdrop-opacity-0 translate-y-10 translate-y-0 scale-95" 
             > 
             <div 
                 role="dialog" 
-                class="relative bg-white flex flex-col rounded-lg overflow-hidden shadow-xl w-50"
+                class="relative bg-white flex flex-col rounded-lg overflow-hidden shadow-xl w-4/12"
                 style="padding:10px 20px;" 
                 ref="modal" 
                 aria-modal="true" 
@@ -34,10 +34,10 @@
                 aria-labelledby="modal-headline" 
               > 
                   <slot name="header"></slot>
-                  <main>
+                  <main class="space-y-2">
                     <slot></slot>
                   </main>
-                  <footer class="flex justify-end my-20">
+                  <footer class="flex justify-end my-4">
                     <slot name="footer"></slot>
                   </footer> 
               </div> 

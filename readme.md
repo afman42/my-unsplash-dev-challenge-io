@@ -17,13 +17,16 @@ Icon: https://google.github.io/material-design-icons/
     - [x] design to code html
     - implementation
         - [x] see list of photos
-        - [] add new photo - should top of the list
-        - [] search by label
+        - [x] add new photo - should top of the list
+        - [x] search by label
         - [x] hover photo, see label and delete button
-        - [] delete image
+        - [x] delete image
 
 - server
     - [x] Read All
     - [x] Create
     - [x] Delete
     - [x] Search Photo by label
+
+- problems
+    - How to catch error handling in `useFetch` the library `vueuse` in method `post`

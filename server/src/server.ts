@@ -138,10 +138,10 @@ function buildServer() {
           const photoSchema = z.object({
             label: z
               .string({ required_error: "The Label is required"})
-              .min(1,{ message: "Must be at least 1 character"}),
+              .min(1,{ message: "The Label Must be at least 1 character"}),
             photoUrl: z
               .string({ required_error: "The Photo URL is required "})
-              .min(1,{ message: "Must be at least 1 character"})
+              .min(1,{ message: "The Photo URL Must be at least 1 character"})
               .refine((text) => text.includes("https://"),"The Photo Url must https")
               .refine((text) => text.includes(".jpeg") || text.includes(".webp") || text.includes(".jpg") || text.includes(".png"),"The Photo Url must .jpg, .jpeg, .png and .webp")
           })
@@ -200,7 +200,7 @@ function buildServer() {
           const paramID = (request.params as any).id as string
           const { passwordInput } = request.body
           const photoSchema = z.object({
-            passwordInput: z.string({ required_error: "The Password Input is required"}).min(1,{ message: "Must be at least 1 character"}),
+            passwordInput: z.string({ required_error: "The Password Input is required"}).min(1,{ message: "The Password Input Must be at least 1 character"}),
           })
           const resError = photoSchema.safeParse({ passwordInput })
           if(!resError.success ) {

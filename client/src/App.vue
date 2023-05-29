@@ -15,8 +15,6 @@ const formPassword = ref({
   id: 0,
 });
 
-console.log(formPassword)
-
 let { isFetching, data: allData, isFinished } = apiGet()
 
 watch(querySearch, debounce(async (newVal: string) => {
@@ -45,9 +43,15 @@ function debounce(func: Function, timeout = 300){
 async function submitHandlerPost(e: Event) {
   e.preventDefault();
   const resSubmitHandlerPost = await apiPostFetch(formInput.value) as IPhotos
-  allData.value = [...allData.value as Array<IPhotos>,resSubmitHandlerPost]
-  console.log(resSubmitHandlerPost)
-  showModal.value = false
+  if(resSubmitHandlerPost){
+    allData.value = [...allData.value as Array<IPhotos>,resSubmitHandlerPost]
+    // console.log(resSubmitHandlerPost)
+    showModal.value = false
+    formInput.value = {
+      label: "",
+      photoUrl: ""
+    }
+  }
 }
 
 async function deleteHandler(e: Event) {
@@ -71,7 +75,7 @@ async function deleteHandler(e: Event) {
           <h1 class="font-noto-sans font-medium">Not Found</h1>
         </div>
       </template>
-    <div class="mt-2 container gap-8 columns-3">
+    <div class="mt-2 container gap-8 lg:columns-3 md:columns-2 sm:columns-1">
       <template v-if="isFinished && !isFetching">
         <div class="w-full flex mb-6" v-for="(item,index) in allData" :key="item.label">
           <img id="image" class="w-full rounded-lg" :class="[ 

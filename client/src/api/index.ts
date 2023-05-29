@@ -49,9 +49,8 @@ export const apiPostFetch = async (payload: { label: string, photoUrl: string })
         er.text().then((errorMessage: string) => {
             const jsParse = JSON.parse(errorMessage)
             if(jsParse.data) {
-                notification(jsParse.data,"alert")
+                notification(jsParse.data,"warning")
             }
-            // console.log(jsParse.photoUrl._errors)
             if (jsParse.photoUrl) {
                 const errPhotoUrl = jsParse.photoUrl._errors
                 for (let index = 0; index < errPhotoUrl.length; index++) {

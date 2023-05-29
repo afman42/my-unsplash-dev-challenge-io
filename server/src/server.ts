@@ -117,6 +117,12 @@ function buildServer() {
             data: { type: "string" }
           }
         },
+        "400": {
+          type: "object",
+          properties: {
+            data: { type: "string" }
+          }
+        },
         "422": {
           type: "object",
           properties: {
@@ -143,13 +149,19 @@ function buildServer() {
               .string({ required_error: "The Photo URL is required "})
               .min(1,{ message: "The Photo URL Must be at least 1 character"})
               .refine((text) => text.includes("https://"),"The Photo Url must https")
-              .refine((text) => text.includes(".jpeg") || text.includes(".webp") || text.includes(".jpg") || text.includes(".png"),"The Photo Url must .jpg, .jpeg, .png and .webp")
+              .refine((text) => text.includes(".jpeg") || text.includes(".webp") || text.includes(".jpg") || text.includes(".png"),"The Photo Url end with must .jpg, .jpeg, .png and .webp")
           })
           const resError = photoSchema.safeParse({ label, photoUrl })
           if(!resError.success ) {
             const formatted = resError.error.format();
             return reply.code(422).send(formatted)
           }
+
+          const resFindFirst = await prisma.photos.findFirst({
+            where: { photoUrl }
+          })
+
+          if(resFindFirst) reply.code(400).send({ data: "The Photo Url must be unique" })
 
           const res = await prisma.photos.create({
               data: {

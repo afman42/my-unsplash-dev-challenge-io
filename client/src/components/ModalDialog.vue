@@ -26,7 +26,7 @@
             > 
             <div 
                 role="dialog" 
-                class="relative bg-white flex flex-col rounded-lg overflow-hidden shadow-xl w-4/12"
+                class="relative bg-white flex flex-col rounded-lg overflow-hidden shadow-xl lg:w-4/12 md:2/12"
                 style="padding:10px 20px;" 
                 ref="modal" 
                 aria-modal="true" 

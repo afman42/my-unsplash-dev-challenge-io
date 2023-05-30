@@ -32,7 +32,13 @@ function buildServer() {
     },
     handler: async function(_: FastifyRequest, reply: FastifyReply){   
       try {
-          const res = await prisma.photos.findMany()
+          const res = await prisma.photos.findMany({
+            orderBy: [
+              {
+                id: "desc"
+              }
+            ]
+          })
           return reply.code(200).send(res)
         } catch (error) {
           reply.code(500).send({ data: "Something Went Wrong"})
@@ -144,7 +150,8 @@ function buildServer() {
           const photoSchema = z.object({
             label: z
               .string({ required_error: "The Label is required"})
-              .min(1,{ message: "The Label Must be at least 1 character"}),
+              .min(1,{ message: "The Label Must be at least 1 character"})
+              .max(12,{ message: "The Label Must be at least 12 character" }),
             photoUrl: z
               .string({ required_error: "The Photo URL is required "})
               .min(1,{ message: "The Photo URL Must be at least 1 character"})

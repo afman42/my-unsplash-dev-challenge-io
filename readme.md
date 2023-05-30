@@ -17,8 +17,7 @@ Icon: https://google.github.io/material-design-icons/
     - [x] design to code html
     - implementation
         - [x] see list of photos
-        - [] add new photo - should top of the list
-        - [x] add new photo
+        - [x] add new photo - should top of the list
         - [x] search by label
         - [x] hover photo, see label and delete button
         - [x] delete image

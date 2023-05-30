@@ -45,6 +45,7 @@ async function submitHandlerPost(e: Event) {
   const resSubmitHandlerPost = await apiPostFetch(formInput.value) as IPhotos
   if(resSubmitHandlerPost){
     allData.value = [...allData.value as Array<IPhotos>,resSubmitHandlerPost]
+    allData.value = [...allData.value].sort((a: IPhotos, b: IPhotos) => b.id - a.id)
     // console.log(resSubmitHandlerPost)
     showModal.value = false
     formInput.value = {

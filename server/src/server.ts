@@ -151,7 +151,7 @@ function buildServer() {
             label: z
               .string({ required_error: "The Label is required"})
               .min(1,{ message: "The Label Must be at least 1 character"})
-              .max(12,{ message: "The Label Must be at least 12 character" }),
+              .max(12,{ message: "The Label Max 12 character" }),
             photoUrl: z
               .string({ required_error: "The Photo URL is required "})
               .min(1,{ message: "The Photo URL Must be at least 1 character"})

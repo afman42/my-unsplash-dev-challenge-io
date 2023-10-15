@@ -2,6 +2,7 @@
 import { apiGet, apiPostFetch, type IPhotos, apiDeleteFetch } from "./api";
 import { Navbar, ModalDialog,Button, LoadingSkeleton  } from "./components";
 import { ref, watch } from 'vue';
+import { watchDebounced } from "@vueuse/core"
 
 const showModal = ref(false);
 const deleteModal = ref(false)
@@ -17,12 +18,12 @@ const formPassword = ref({
 
 let { isFetching, data: allData, isFinished } = apiGet()
 
-watch(querySearch, debounce(async (newVal: string) => {
+watchDebounced(querySearch, async (newVal: string) => {
   let responseSearch = await apiGet(newVal).get().json()
   allData.value = responseSearch.data.value
   isFetching.value = responseSearch.isFetching.value
   isFinished.value = responseSearch.isFinished.value
-},1000))
+}, { debounce: 500, maxWait: 1000 })
 
 function showMyModal (bool: boolean) {
   showModal.value = bool
@@ -32,21 +33,12 @@ function deleteMyModal (bool: boolean) {
   deleteModal.value = bool
 }
 
-function debounce(func: Function, timeout = 300){
-  let timer: number;
-  return (...args: any) => {
-    clearTimeout(timer);
-    timer = setTimeout(() => { func.apply(this, args); }, timeout);
-  };
-}
-
 async function submitHandlerPost(e: Event) {
   e.preventDefault();
   const resSubmitHandlerPost = await apiPostFetch(formInput.value) as IPhotos
-  if(resSubmitHandlerPost){
-    allData.value = [...allData.value as Array<IPhotos>,resSubmitHandlerPost]
+  if(resSubmitHandlerPost.data.value != null){
+    allData.value = [...allData.value as Array<IPhotos>,resSubmitHandlerPost.data.value]
     allData.value = [...allData.value].sort((a: IPhotos, b: IPhotos) => b.id - a.id)
-    // console.log(resSubmitHandlerPost)
     showModal.value = false
     formInput.value = {
       label: "",
@@ -58,7 +50,7 @@ async function submitHandlerPost(e: Event) {
 async function deleteHandler(e: Event) {
   e.preventDefault();
   const res = await apiDeleteFetch(formPassword.value.password,formPassword.value.id)
-  if(res !== undefined){
+  if(res.data.value !== null){
     allData.value = [...allData.value as Array<IPhotos>].filter((v: IPhotos) => v.id !== formPassword.value.id)
     deleteModal.value = false
     formPassword.value.password = ""

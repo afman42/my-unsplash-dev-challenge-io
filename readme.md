@@ -27,6 +27,3 @@ Icon: https://google.github.io/material-design-icons/
     - [x] Create
     - [x] Delete
     - [x] Search Photo by label
-
-- problems
-    - How to catch error handling in `useFetch` the library `vueuse` in method `post`
